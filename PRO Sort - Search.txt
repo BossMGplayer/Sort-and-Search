@@ -1,0 +1,72 @@
+#include <iostream>
+
+using namespace std;
+
+struct Karta {
+    int cisloKarty;
+    string meno;
+    string priezvisko;
+    string datumPlatnosti;
+    int CVV;
+
+    void vypis() {
+        cout<<endl;
+        cout<<"Cislo karty: \t\t"<<cisloKarty<<endl;
+        cout<<"Meno: \t\t\t"<<meno<<endl;
+        cout<<"Priezvisko: \t\t"<<priezvisko<<endl;
+        cout<<"Datum platnosti: \t"<<datumPlatnosti<<endl;
+        cout<<"CVV: \t\t\t"<<CVV<<endl;
+    }
+    int zadajKartu() {
+        return cisloKarty;
+    }
+};
+
+void insertionSort(Karta pole[], int dlzka) {
+    int j;
+    struct Karta cislo;
+
+    for (int i = 1; i < dlzka; i++) {
+        cislo = pole[i];
+        j = i - 1;
+        while (j >= 0 && pole[j].zadajKartu() > cislo.zadajKartu()) {
+            pole[j + 1] = pole[j];
+            j--;
+
+        }
+        pole[j + 1] = cislo;
+    }
+}
+
+int binarySearch(int hladane, Karta pole[], int L, int R) {
+    if (L <= R) {
+        int stred = L + (R - L) / 2;
+        if (hladane == pole[stred].zadajKartu()) return stred;
+        if (hladane > pole[stred].zadajKartu()) return binarySearch(hladane, pole, stred + 1, R);
+        return binarySearch(hladane, pole, L, stred - 1);
+    }
+    return -1;
+}
+
+
+int main()
+{
+    struct Karta karty[5];
+    int dlzka = sizeof(karty) / sizeof(karty[0]);
+    karty[0] = {5842, "Vaclav", "Stefan", "11/24", 254};
+    karty[1] = {1258, "Klaudia", "Draha", "09/23", 854};
+    karty[2] = {3698, "Agnesa", "Vladislav", "07/23", 975};
+    karty[3] = {7452, "Vladan", "Justina", "10/24", 482};
+    karty[4] = {5428, "Marika", "Milos", "05/23", 325};
+    int hladane, najdene;
+
+    insertionSort(karty, dlzka);
+
+    cout << "Zadajte cislo karty: ";
+    cin >> hladane;
+    najdene = binarySearch(hladane, karty, 0, dlzka - 1);
+    if (najdene == -1) cout << "Karta sa nenasla."<<endl;
+    else karty[najdene].vypis();
+
+    return 0;
+}
